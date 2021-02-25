@@ -1,0 +1,23 @@
+.Information {
+    background-color: #30a7d7;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: left;
+    float: right;
+}
+
+.Information div {
+    float: left;
+    margin: 8px;
+}
+
+.title{
+    font-size: 16px;
+    color: white;
+}
+
+.subTitle {
+    font-size: 14px;
+    color: black;
+
+}

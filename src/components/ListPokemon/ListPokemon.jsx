@@ -1,9 +1,11 @@
 import React, { useEffect, useState }  from 'react'
+import {PokemonDatail} from './PokemonDatail.jsx'
 
 export const ListPokemon = (props) => {
 
     const [pokemons, setPokemons] = useState([])
     const [selectPokemon, setSelectPokemon] = useState(null)
+    const [hidden, setHidden] = useState(true)
 
     const url_Api = "https://pokeapi.co/api/v2"
     const getPokemons = () =>  {
@@ -21,6 +23,7 @@ export const ListPokemon = (props) => {
         .then((responseParsed) => {
             setSelectPokemon(responseParsed)
         })
+        setHidden(false)
     }
 
     useEffect(() => {
@@ -30,9 +33,11 @@ export const ListPokemon = (props) => {
 
     return(
         <div>
-            {selectPokemon && <img src={selectPokemon.sprites.front_default}/>}
+            <PokemonDatail pokemon={selectPokemon}/>
             <ul> 
-                {pokemons.map((pokemon) => {
+                <li> 
+                    <button onClick={() => setHidden(!hidden)}> Exibir Pokemons </button> </li>
+                {hidden && pokemons.map((pokemon) => {
                     return(
                         <li key={pokemon.name}> <button onClick={() => getDetails(pokemon)}> { pokemon.name } </button> </li>
                     )
