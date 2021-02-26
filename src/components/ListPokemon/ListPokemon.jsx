@@ -1,48 +1,40 @@
 import React, { useEffect, useState }  from 'react'
 import {PokemonDatail} from './PokemonDatail.jsx'
+import axios from 'axios'
 
 export const ListPokemon = (props) => {
 
-    const [pokemons, setPokemons] = useState([])
-    const [selectPokemon, setSelectPokemon] = useState(null)
-    const [hidden, setHidden] = useState(true)
+    const [pokemonsWithAllDetails,setPokemonsWithAllDetails] = useState()
 
     const url_Api = "https://pokeapi.co/api/v2"
-    const getPokemons = () =>  {
-        fetch(`${url_Api}/pokemon`)
-        .then((response) => response.json())
-        .then((responseParsed) => {
-            setPokemons(responseParsed.results)
-        })
-
-    } 
-
-    const getDetails = (pokemon) => {
-        fetch(pokemon.url)
-        .then((response) => response.json())
-        .then((responseParsed) => {
-            setSelectPokemon(responseParsed)
-        })
-        setHidden(false)
-    }
-
+    
     useEffect(() => {
-        getPokemons()
+        axios(`${url_Api}/pokemon`)
+        .then((response) => {
+            renderPokemons(response.data.results)
+        })
     },[])
 
+    const renderPokemons = (apiResponsePokemon) => {
+        const promisses = apiResponsePokemon.map(pokemon => {
+            return axios(pokemon.url)
+        })
+        Promise.all(promisses)
+        .then(promise => {
+            setPokemonsWithAllDetails(promise)
+        })
+    }
+
+    const renderAllPokemonsDetails = () => {
+        return pokemonsWithAllDetails.map(pokemonDetails => {
+
+            return <PokemonDatail pokemon={pokemonDetails.data} key={pokemonDetails.data.name} />
+        })
+    }
 
     return(
-        <div>
-            <PokemonDatail pokemon={selectPokemon}/>
-            <ul> 
-                <li> 
-                    <button onClick={() => setHidden(!hidden)}> Exibir Pokemons </button> </li>
-                {hidden && pokemons.map((pokemon) => {
-                    return(
-                        <li key={pokemon.name}> <button onClick={() => getDetails(pokemon)}> { pokemon.name } </button> </li>
-                    )
-                })}
-            </ul>
+        <div className="ListPokemon">
+            {pokemonsWithAllDetails && renderAllPokemonsDetails()}
         </div>
     )
 }

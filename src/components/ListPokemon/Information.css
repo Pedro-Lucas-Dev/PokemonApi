@@ -21,3 +21,20 @@
     color: black;
 
 }
+
+.CardPokemon {
+    float: left;
+    background-color: #107db1;
+    margin-left: 25px;
+    margin-top: 20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.nameContainer {
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
